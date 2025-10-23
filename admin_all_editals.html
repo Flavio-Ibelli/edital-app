@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Todos os Editais{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Todos os Editais Gerados</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if editals %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome do Formulário</th>
+                        <th>Número do Pregão</th>
+                        <th>Objeto dos Serviços</th>
+                        <th>Criador</th>
+                        <th>Data de Criação</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for edital in editals %}
+                    <tr>
+                        <td>{{ edital.id }}</td>
+                        <td>{{ edital.form_name }}</td>
+                        <td>{{ edital.numero_pregao }}</td>
+                        <td>{{ edital.objeto_servicos }}</td>
+                        <td>{{ edital.creator.username if edital.creator else 'N/A' }}</td> {# Exibe o nome do criador #}
+                        <td>{{ edital.data_criacao.strftime('%d/%m/%Y %H:%M') }}</td>
+                        <td>
+                            {% if edital.generated_filename %}
+                                <a href="{{ url_for('download_edital', filename=edital.generated_filename) }}" class="btn btn-sm btn-success">Download</a>
+                            {% else %}
+                                <span class="text-muted">Arquivo não gerado</span>
+                            {% endif %}
+                            <a href="{{ url_for('edit_edital', edital_id=edital.id) }}" class="btn btn-sm btn-info">Editar</a>
+                            <a href="{{ url_for('delete_edital', edital_id=edital.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir este edital?');">Excluir</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>Nenhum edital foi gerado ainda.</p>
+    {% endif %}
+</div>
+{% endblock %}

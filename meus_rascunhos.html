@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Meus Rascunhos de Editais{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Meus Rascunhos de Editais</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if rascunhos %}
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Nome do Rascunho</th>
+                <th>Última Atualização</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rascunho in rascunhos %}
+            <tr>
+                <td>{{ rascunho.form_name }}</td>
+                <td>{{ rascunho.updated_at }}</td>
+                <td>
+                    <a href="{{ url_for('editar_rascunho', form_id=rascunho.id) }}" class="btn btn-sm btn-info">Editar</a>
+                    <a href="{{ url_for('download_edital', filename=rascunho.generated_edital_path.split('/')[-1]) }}" class="btn btn-sm btn-success" {% if not rascunho.generated_edital_path %}disabled{% endif %}>Download Último Edital</a>
+                    <form action="{{ url_for('excluir_rascunho', form_id=rascunho.id) }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir este rascunho?');">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        Você ainda não tem nenhum rascunho salvo. Comece a <a href="{{ url_for('gerar_edital_web') }}">gerar um novo edital</a>!
+    </div>
+    {% endif %}
+
+    <a href="{{ url_for('gerar_edital_web') }}" class="btn btn-primary mt-3">Criar Novo Edital</a>
+</div>
+{% endblock %}

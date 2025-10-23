@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Editais{% endblock %}
+
+{% block header %}Lista de Editais{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-actions">
+        <a href="{{ url_for('index') }}" class="btn-primary">Novo Edital</a>
+    </div>
+    
+    {% if editais %}
+    <table class="users-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Número</th>
+                <th>Modalidade</th>
+                <th>Data de Publicação</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for edital in editais %}
+            <tr>
+                <td>{{ edital.id }}</td>
+                <td>{{ edital.titulo }}</td>
+                <td>{{ edital.numero_edital }}</td>
+                <td>{{ modalidades.get(edital.modalidade, edital.modalidade) }}</td>
+                <td>{{ edital.data_publicacao }}</td>
+                <td class="actions">
+                    <a href="{{ url_for('visualizar_edital', edital_id=edital.id) }}" class="btn btn-primary btn-sm">Visualizar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Nenhum edital encontrado.</p>
+    {% endif %}
+</div>
+{% endblock %}

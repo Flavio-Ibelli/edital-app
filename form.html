@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+
+{% block title %}Formulário de Edital{% endblock %}
+
+{% block header %}Formulário de Elaboração de Edital{% endblock %}
+
+{% block content %}
+{% if mensagem %}
+<div class="alert alert-{{ 'success' if mensagem.tipo == 'sucesso' else 'danger' }}">
+    {{ mensagem.texto }}
+</div>
+{% endif %}
+
+<form method="POST">
+    <fieldset>
+        <legend>Informações Gerais</legend>
+        
+        <div class="form-group">
+            <label for="titulo">1. Título do Edital:</label>
+            <input type="text" id="titulo" name="titulo" value="{{ edital.titulo }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="numero_pregao">Número do Pregão *</label>
+            <input type="text" id="numero_pregao" name="numero_pregao" required 
+           placeholder="Ex: 100001" pattern="[0-9]+" title="Apenas números">
+        </div>
+        
+        <div class="form-group">
+            <label for="modalidade">3. Modalidade de Licitação:</label>
+            <select id="modalidade" name="modalidade">
+                <option value="pregao_eletronico" {% if edital.modalidade == 'pregao_eletronico' %}selected{% endif %}>Pregão Eletrônico</option>
+                <option value="pregao_presencial" {% if edital.modalidade == 'pregao_presencial' %}selected{% endif %}>Pregão Presencial</option>
+                <option value="concorrencia" {% if edital.modalidade == 'concorrencia' %}selected{% endif %}>Concorrência</option>
+                <option value="tomada_precos" {% if edital.modalidade == 'tomada_precos' %}selected{% endif %}>Tomada de Preços</option>
+                <option value="convite" {% if edital.modalidade == 'convite' %}selected{% endif %}>Convite</option>
+                <option value="leilao" {% if edital.modalidade == 'leilao' %}selected{% endif %}>Leilão</option>
+                <option value="concurso" {% if edital.modalidade == 'concurso' %}selected{% endif %}>Concurso</option>
+                <option value="dispensa" {% if edital.modalidade == 'dispensa' %}selected{% endif %}>Dispensa de Licitação</option>
+                <option value="inexigibilidade" {% if edital.modalidade == 'inexigibilidade' %}selected{% endif %}>Inexigibilidade</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="objeto">4. Objeto:</label>
+            <textarea id="objeto" name="objeto" required>{{ edital.objeto }}</textarea>
+        </div>
+        
+        <div class="form-group currency-input">
+            <label for="orcamento">5. Orçamento Estimado:</label>
+            <span class="currency-symbol">R\$</span>
+            <input type="text" id="orcamento" name="orcamento" value="{{ edital.orcamento }}" style="padding-left: 50px !important;">
+        </div>
+        
+        <div class="form-group">
+            <label for="prazo_execucao">6. Prazo de Execução (em dias):</label>
+            <input type="number" id="prazo_execucao" name="prazo_execucao" value="{{ edital.prazo_execucao }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="unidade_responsavel">7. Unidade Responsável:</label>
+            <input type="text" id="unidade_responsavel" name="unidade_responsavel" value="{{ edital.unidade_responsavel }}">
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <legend>Requisitos Técnicos</legend>
+        
+        <div class="form-group">
+            <label for="requisitos_tecnicos">8. Requisitos Técnicos:</label>
+            <textarea id="requisitos_tecnicos" name="requisitos_tecnicos">{{ edital.requisitos_tecnicos }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="qualificacao_tecnica">9. Qualificação Técnica:</label>
+            <textarea id="qualificacao_tecnica" name="qualificacao_tecnica">{{ edital.qualificacao_tecnica }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="especificacoes_tecnicas">10. Especificações Técnicas:</label>
+            <textarea id="especificacoes_tecnicas" name="especificacoes_tecnicas">{{ edital.especificacoes_tecnicas }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="normas_tecnicas">11. Normas Técnicas Aplicáveis:</label>
+            <textarea id="normas_tecnicas" name="normas_tecnicas">{{ edital.normas_tecnicas }}</textarea>
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <legend>Critérios de Avaliação</legend>
+        
+        <div class="form-group">
+            <label for="criterios_avaliacao">12. Critérios de Avaliação:</label>
+            <textarea id="criterios_avaliacao" name="criterios_avaliacao">{{ edital.criterios_avaliacao }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="tipo_licitacao">13. Tipo de Licitação:</label>
+            <select id="tipo_licitacao" name="tipo_licitacao">
+                <option value="menor_preco" {% if edital.tipo_licitacao == 'menor_preco' %}selected{% endif %}>Menor Preço</option>
+                <option value="melhor_tecnica" {% if edital.tipo_licitacao == 'melhor_tecnica' %}selected{% endif %}>Melhor Técnica</option>
+                <option value="tecnica_preco" {% if edital.tipo_licitacao == 'tecnica_preco' %}selected{% endif %}>Técnica e Preço</option>
+                <option value="maior_lance" {% if edital.tipo_licitacao == 'maior_lance' %}selected{% endif %}>Maior Lance ou Oferta</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="criterios_desempate">14. Critérios de Desempate:</label>
+            <textarea id="criterios_desempate" name="criterios_desempate">{{ edital.criterios_desempate }}</textarea>
+        </div>
+    </fieldset>
+
+         <div class="form-group">
+            <label for="tipo_participacao">15. Tipo de Participação:</label>
+            <select id="tipo_participacao" name="tipo_participacao">
+                <option value="">Selecione...</option>
+                <option value="ampla" {% if edital.tipo_participacao == 'ampla' %}selected{% endif %}>Licitação de Ampla Participação</option>
+                <option value="exclusiva" {% if edital.tipo_participacao == 'exclusiva' %}selected{% endif %}>Participação Exclusiva ME/EPP
+        /Cooperativas</option>
+            </select>
+        </div>
+    <fieldset>
+        
+        <legend>Requisitos de Habilitação</legend>
+        
+        <div class="form-group">
+            <label for="habilitacao_juridica">16. Habilitação Jurídica:</label>
+            <textarea id="habilitacao_juridica" name="habilitacao_juridica">{{ edital.habilitacao_juridica }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="regularidade_fiscal">17. Regularidade Fiscal e Trabalhista:</label>
+            <textarea id="regularidade_fiscal" name="regularidade_fiscal">{{ edital.regularidade_fiscal }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="qualificacao_economica">18. Qualificação Econômico-Financeira:</label>
+            <textarea id="qualificacao_economica" name="qualificacao_economica">{{ edital.qualificacao_economica }}</textarea>
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <legend>Cronograma</legend>
+        
+        <div class="form-group">
+            <label for="data_publicacao">19. Data de Publicação:</label>
+            <input type="date" id="data_publicacao" name="data_publicacao" value="{{ edital.data_publicacao }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="data_abertura">20. Data de Abertura:</label>
+            <input type="date" id="data_abertura" name="data_abertura" value="{{ edital.data_abertura }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="data_visita_tecnica">21. Data da Visita Técnica (se aplicável):</label>
+            <input type="date" id="data_visita_tecnica" name="data_visita_tecnica" value="{{ edital.data_visita_tecnica }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="data_inicio_execucao">22. Data de Início da Execução:</label>
+            <input type="date" id="data_inicio_execucao" name="data_inicio_execucao" value="{{ edital.data_inicio_execucao }}">
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <legend>Informações Financeiras</legend>
+        
+        <div class="form-group">
+            <label for="fonte_recursos">22. Fonte de Recursos:</label>
+            <input type="text" id="fonte_recursos" name="fonte_recursos" value="{{ edital.fonte_recursos }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="dotacao_orcamentaria">23. Dotação Orçamentária:</label>
+            <input type="text" id="dotacao_orcamentaria" name="dotacao_orcamentaria" value="{{ edital.dotacao_orcamentaria }}">
+        </div>
+        
+        <div class="form-group currency-input">
+            <label for="valor_garantia">24. Valor da Garantia (se aplicável):</label>
+            <span class="currency-symbol">R\$</span>
+            <input type="text" id="valor_garantia" name="valor_garantia" value="{{ edital.valor_garantia }}" style="padding-left: 50px !important;">
+        </div>
+        
+        <div class="form-group">
+            <label for="condicoes_pagamento">25. Condições de Pagamento:</label>
+            <textarea id="condicoes_pagamento" name="condicoes_pagamento">{{ edital.condicoes_pagamento }}</textarea>
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <legend>Sanções e Penalidades</legend>
+        
+        <div class="form-group">
+            <label for="sancoes_administrativas">26. Sanções Administrativas:</label>
+            <textarea id="sancoes_administrativas" name="sancoes_administrativas">{{ edital.sancoes_administrativas }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="multas_penalidades">27. Multas e Penalidades:</label>
+            <textarea id="multas_penalidades" name="multas_penalidades">{{ edital.multas_penalidades }}</textarea>
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <legend>Contato e Informações Adicionais</legend>
+        
+        <div class="form-group">
+            <label for="local_entrega_propostas">28. Local de Entrega das Propostas:</label>
+            <input type="text" id="local_entrega_propostas" name="local_entrega_propostas" value="{{ edital.local_entrega_propostas }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="contato_responsavel">29. Contato do Responsável:</label>
+            <input type="text" id="contato_responsavel" name="contato_responsavel" value="{{ edital.contato_responsavel }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="email_contato">30. E-mail para Contato:</label>
+            <input type="email" id="email_contato" name="email_contato" value="{{ edital.email_contato }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="telefone_contato">31. Telefone para Contato:</label>
+            <input type="text" id="telefone_contato" name="telefone_contato" value="{{ edital.telefone_contato }}">
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <legend>Observações</legend>
+        
+        <div class="form-group">
+            <label for="observacoes">32. Observações Adicionais:</label>
+            <textarea id="observacoes" name="observacoes">{{ edital.observacoes }}</textarea>
+        </div>
+    </fieldset>
+    
+    <div class="form-actions">
+        <button type="submit" class="btn-primary">Salvar Edital</button>
+        <a href="{{ url_for('index') }}" class="btn-secondary">Novo Edital</a>
+    </div>
+</form>
+{% endblock %}

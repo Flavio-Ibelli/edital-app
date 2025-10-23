@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Adicionar Usuário{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Adicionar Novo Usuário</h1>
+    
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    
+    <form method="post">
+        <div class="form-group">
+            <label for="username">Nome de Usuário:</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Senha:</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="is_admin" name="is_admin">
+            <label class="form-check-label" for="is_admin">Administrador</label>
+        </div>
+        
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <a href="{{ url_for('admin_usuarios') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

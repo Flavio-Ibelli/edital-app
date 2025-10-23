@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gerador de Editais{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+body {
+    background: url('/static/img/fundo.png') center/cover no-repeat fixed !important;
+    min-height: 100vh !important;
+}
+
+/* Container principal */
+.container {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    border-radius: 12px !important;
+    padding: 30px !important;
+    margin-top: 20px !important;
+    margin-bottom: 20px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* NAVBAR - Fundo sólido branco para legibilidade */
+.navbar {
+    background-color: #ffffff !important;
+    border-bottom: 3px solid #007bff !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Links da navbar - texto escuro e legível */
+.navbar-nav .nav-link {
+    color: #2c3e50 !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+    padding: 10px 15px !important;
+    border-radius: 6px !important;
+    margin: 0 5px !important;
+    transition: all 0.3s ease !important;
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: #e3f2fd !important;
+    color: #1976d2 !important;
+}
+
+.navbar-brand {
+    color: #1976d2 !important;
+    font-weight: bold !important;
+    font-size: 20px !important;
+}
+
+/* CAMPOS DE FORMULÁRIO - AZUL CLARO GARANTIDO */
+input[type="text"], 
+input[type="email"], 
+input[type="number"], 
+input[type="date"],
+input[type="password"],
+textarea, 
+.form-control {
+    background-color: #e3f2fd !important;
+    border: 2px solid #90caf9 !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    color: #1565c0 !important;
+    font-weight: 500 !important;
+}
+
+/* CORREÇÃO ESPECÍFICA PARA SELECTS - Deslocamento */
+select, 
+.form-select,
+select.form-control {
+    background-color: #e3f2fd !important;
+    border: 2px solid #90caf9 !important;
+    border-radius: 8px !important;
+    padding: 12px 15px !important;
+    color: #1565c0 !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    height: auto !important;
+    min-height: 45px !important;
+    vertical-align: top !important;
+    appearance: none !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+    background-position: right 12px center !important;
+    background-repeat: no-repeat !important;
+    background-size: 16px 12px !important;
+    padding-right: 40px !important;
+}
+
+/* Options dentro do select */
+select option {
+    background-color: #ffffff !important;
+    color: #1565c0 !important;
+    padding: 8px !important;
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+}
+
+/* Focus nos campos */
+input:focus, textarea:focus, select:focus, .form-control:focus, .form-select:focus {
+    background-color: #bbdefb !important;
+    border-color: #2196f3 !important;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2) !important;
+    outline: none !important;
+}
+
+/* Labels */
+label, .form-label {
+    color: #1565c0 !important;
+    font-weight: 600 !important;
+    margin-bottom: 8px !important;
+}
+
+/* Cards */
+.card {
+    background-color: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Botões */
+.btn-primary {
+    background-color: #1976d2 !important;
+    border-color: #1976d2 !important;
+    color: white !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    padding: 12px 24px !important;
+}
+
+.btn-primary:hover {
+    background-color: #1565c0 !important;
+    border-color: #1565c0 !important;
+}
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{{ url_for('index') }}">Gerador de Editais</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">Meus Editais</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('generate_edital') }}">Novo Edital</a>
+                    </li>
+                    {% if current_user.is_admin() %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarAdminDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Administração
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarAdminDropdown">
+                                <a class="dropdown-item" href="{{ url_for('admin_dashboard') }}">Dashboard Admin</a>
+                                <a class="dropdown-item" href="{{ url_for('admin_all_editals') }}">Gerenciar Editais</a>
+                                <a class="dropdown-item" href="{{ url_for('admin_manage_users') }}">Gerenciar Usuários</a>
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="nav-link">Olá, {{ current_user.username }}!</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">Sair</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('register') }}">Registrar</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

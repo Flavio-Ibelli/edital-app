@@ -1,0 +1,335 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ 'Editar Edital' if edital_id else 'Gerar Novo Edital' }}</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {# Adiciona o id 'editalForm' e o evento onsubmit para desabilitar o botão #}
+    <form method="POST" id="editalForm" onsubmit="disableSubmitButton()">
+        {{ form.hidden_tag() }}
+        
+        <div class="card mb-3">
+            <div class="card-header">
+                Informações Básicas do Edital
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    {{ form.form_name.label }}
+                    {{ form.form_name(class="form-control") }}
+                    {% if form.form_name.errors %}
+                        <div class="alert alert-danger mt-1">
+                            {% for error in form.form_name.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.numero_pregao.label }}
+                    {{ form.numero_pregao(class="form-control") }}
+                    {% if form.numero_pregao.errors %}
+                        <div class="alert alert-danger mt-1">
+                            {% for error in form.numero_pregao.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.objeto_servicos.label }}
+                    {{ form.objeto_servicos(class="form-control") }}
+                    {% if form.objeto_servicos.errors %}
+                        <div class="alert alert-danger mt-1">
+                            {% for error in form.objeto_servicos.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.compras_gov_numero.label }}
+                    {{ form.compras_gov_numero(class="form-control") }}
+                    {% if form.compras_gov_numero.errors %}
+                        <div class="alert alert-danger mt-1">
+                            {% for error in form.compras_gov_numero.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.valor_total_orcamento.label }}
+                    {{ form.valor_total_orcamento(class="form-control") }}
+                    {% if form.valor_total_orcamento.errors %}
+                        <div class="alert alert-danger mt-1">
+                            {% for error in form.valor_total_orcamento.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.data_base_orcamento.label }}
+                    {{ form.data_base_orcamento(class="form-control") }}
+                    {% if form.data_base_orcamento.errors %}
+                        <div class="alert alert-danger mt-1">
+                            {% for error in form.data_base_orcamento.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.data_sessao.label }}
+                    {{ form.data_sessao(class="form-control") }}
+                    {% if form.data_sessao.errors %}
+                        <div class="alert alert-danger mt-1">
+                            {% for error in form.data_sessao.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.hora_sessao.label }}
+                    {{ form.hora_sessao(class="form-control") }}
+                    {% if form.hora_sessao.errors %}
+                        <div class="alert alert-danger mt-1">
+                            {% for error in form.hora_sessao.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.data_disponibilidade.label }}
+                    {{ form.data_disponibilidade(class="form-control") }}
+                    {% if form.data_disponibilidade.errors %}
+                        <div class="alert alert-danger mt-1">
+                            {% for error in form.data_disponibilidade.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.email_contato1.label }}
+                    {{ form.email_contato1(class="form-control") }}
+                    {% if form.email_contato1.errors %}
+                        <div class="alert alert-danger mt-1">
+                            {% for error in form.email_contato1.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.email_contato2.label }}
+                    {{ form.email_contato2(class="form-control") }}
+                    {% if form.email_contato2.errors %}
+                        <div class="alert alert-danger mt-1">
+                            {% for error in form.email_contato2.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.orcamento_sigiloso.label }}
+                    {{ form.orcamento_sigiloso(class="form-control") }}
+                    {% if form.orcamento_sigiloso.errors %}
+                        <div class="alert alert-danger mt-1">
+                            {% for error in form.orcamento_sigiloso.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header">
+                Cláusulas do Edital
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    {{ form.permite_visita_tecnica.label }}
+                    {{ form.permite_visita_tecnica(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.criterio_julgamento.label }}
+                    {{ form.criterio_julgamento(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.aplicacao_criterio.label }}
+                    {{ form.aplicacao_criterio(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.modo_disputa.label }}
+                    {{ form.modo_disputa(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.tipo_participacao.label }}
+                    {{ form.tipo_participacao(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.participacao_consorcio.label }}
+                    {{ form.participacao_consorcio(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.diferencial_aliquota.label }}
+                    {{ form.diferencial_aliquota(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.regularidade_fiscal.label }}
+                    {{ form.regularidade_fiscal(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.qualificacao_tecnica.label }}
+                    {{ form.qualificacao_tecnica(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.atestados_qualificacao_tecnica.label }}
+                    {{ form.atestados_qualificacao_tecnica(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.qualificacao_economico_financeira.label }}
+                    {{ form.qualificacao_economico_financeira(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.servico_continuo.label }}
+                    {{ form.servico_continuo(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.garantia_sim_nao.label }}
+                    {{ form.garantia_sim_nao(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.subcontratacao.label }}
+                    {{ form.subcontratacao(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.permitido_cooperativa.label }}
+                    {{ form.permitido_cooperativa(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.cad_madeira.label }}
+                    {{ form.cad_madeira(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.documento_tecnico_sim_nao.label }}
+                    {{ form.documento_tecnico_sim_nao(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.documento_tecnico_nome.label }}
+                    {{ form.documento_tecnico_nome(class="form-control") }}
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header">
+                Anexo 1 - Declarações
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    {{ form.numero_licitacao_anexo1.label }}
+                    {{ form.numero_licitacao_anexo1(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.objeto_licitacao_anexo1.label }}
+                    {{ form.objeto_licitacao_anexo1(class="form-control") }}
+                </div>
+                <div class="form-group form-check">
+                    {{ form.incluir_rec_judicial(class="form-check-input") }}
+                    {{ form.incluir_rec_judicial.label(class="form-check-label") }}
+                </div>
+                <div class="form-group form-check">
+                    {{ form.incluir_rec_extrajudicial(class="form-check-input") }}
+                    {{ form.incluir_rec_extrajudicial.label(class="form-check-label") }}
+                </div>
+                <div class="form-group form-check">
+                    {{ form.incluir_me_epp(class="form-check-input") }}
+                    {{ form.incluir_me_epp.label(class="form-check-label") }}
+                </div>
+                <div class="form-group form-check">
+                    {{ form.incluir_cadmadeira(class="form-check-input") }}
+                    {{ form.incluir_cadmadeira.label(class="form-check-label") }}
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header">
+                Cláusulas Contratuais Específicas
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    {{ form.regime_empreitada.label }}
+                    {{ form.regime_empreitada(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.prazos_execucao.label }}
+                    {{ form.prazos_execucao(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.tipo_instrumento_contratual.label }}
+                    {{ form.tipo_instrumento_contratual(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.prorrogacao_contrato.label }}
+                    {{ form.prorrogacao_contrato(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.medicao_servicos.label }}
+                    {{ form.medicao_servicos(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.fiscalizacao_inspecao.label }}
+                    {{ form.fiscalizacao_inspecao(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.consequencias_rescisao.label }}
+                    {{ form.consequencias_rescisao(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.suspensao_temporaria_servicos.label }}
+                    {{ form.suspensao_temporaria_servicos(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.aceitacao_servicos.label }}
+                    {{ form.aceitacao_servicos(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.garantia_servicos.label }}
+                    {{ form.garantia_servicos(class="form-control") }}
+                </div>
+            </div>
+        </div>
+
+        {# O botão de submit agora tem um ID para ser facilmente acessado pelo JavaScript #}
+        {{ form.submit(class="btn btn-primary", id="submitButton") }}
+    </form>
+</div>
+
+<script>
+    function disableSubmitButton() {
+        var button = document.getElementById('submitButton');
+        button.disabled = true;
+        button.textContent = 'Processando...'; // Opcional: muda o texto do botão
+        // Adiciona um pequeno atraso antes de realmente submeter para garantir que o estado do botão seja atualizado visualmente
+        setTimeout(function() {
+            document.getElementById('editalForm').submit();
+        }, 50); // 50 milissegundos
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block title %}Visualização do Edital{% endblock %}
+
+{% block content %}
+<div class="edital-view">
+    <h2>{{ dados.titulo }}</h2>
+    
+    <div class="section">
+        <div class="section-title">Identificação</div>
+        <div class="section-content">
+            <p><strong>Objeto:</strong> {{ dados.titulo }}</p>
+            <p><strong>Nº Processo:</strong> {{ dados.numeroProcesso }}</p>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">Configuração da Licitação e Sessão</div>
+        <div class="section-content">
+            <p><strong>Tipo de Licitação:</strong> 
+                {% if dados.tipoLicitacao == 'licitacao' %}Licitação
+                {% elif dados.tipoLicitacao == 'pregao' %}Pregão
+                {% elif dados.tipoLicitacao == 'dispensa' %}Dispensa
+                {% else %}{{ dados.tipoLicitacao }}{% endif %}
+            </p>
+            <p><strong>Critérios:</strong> 
+                {% if dados.criterios == 'menor-preco' %}Menor preço
+                {% elif dados.criterios == 'maior-desconto' %}Maior desconto
+                {% elif dados.criterios == 'tecnico-preco' %}Técnico e preço
+                {% else %}{{ dados.criterios }}{% endif %}
+            </p>
+            <p><strong>Modo de Disputa:</strong> 
+                {% if dados.modoDisputa == 'aberto' %}Aberto
+                {% elif dados.modoDisputa == 'fechado' %}Fechado
+                {% elif dados.modoDisputa == 'fechado-aberto' %}Fechado e Aberto
+                {% elif dados.modoDisputa == 'aberto-fechado' %}Aberto e Fechado
+                {% else %}{{ dados.modoDisputa }}{% endif %}
+            </p>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">Valor e Participação</div>
+        <div class="section-content">
+            <p><strong>Orçamento:</strong> 
+                {% if dados.orcamento == 'publico' %}Público
+                {% elif dados.orcamento == 'sigiloso' %}Sigiloso
+                {% else %}{{ dados.orcamento }}{% endif %}
+            </p>
+            
+            {% if dados.orcamento == 'publico' %}
+            <p><strong>Valor Estimado:</strong> R$ {{ "%.2f"|format(dados.valorEstimado) }}</p>
+            <p><strong>Data-base:</strong> {{ dados.dataBase }}</p>
+            {% endif %}
+            
+            <p><strong>Participação:</strong> 
+                {% if dados.participacao == 'ampla' %}Ampla
+                {% elif dados.participacao == 'me-epp' %}ME/EPP
+                {% else %}{{ dados.participacao }}{% endif %}
+            </p>
+            <p><strong>Será permitido Consórcio:</strong> 
+                {% if dados.permitirConsorcio == 'sim' %}Sim
+                {% elif dados.permitirConsorcio == 'nao' %}Não
+                {% else %}{{ dados.permitirConsorcio }}{% endif %}
+            </p>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">Detalhes da Contratação</div>
+        <div class="section-content">
+            <p><strong>Regime de Empreitada:</strong> 
+                {% if dados.regimeEmpreitada == 'preco-unitario' %}Preço unitário
+                {% elif dados.regimeEmpreitada == 'preco-global' %}Preço global
+                {% elif dados.regimeEmpreitada == 'preco-unitario-global' %}Preço unitário e global
+                {% else %}{{ dados.regimeEmpreitada }}{% endif %}
+            </p>
+            <p><strong>Prazo de Execução:</strong> {{ dados.prazoExecucao }}</p>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">Requisitos para Contratação</div>
+        <div class="section-content">
+            <p><strong>Prazo para devolução do contrato assinado:</strong> 
+                {% if dados.prazoDevolucaoContrato == '15' %}15 dias
+                {% elif dados.prazoDevolucaoContrato == '5' %}5 dias
+                {% else %}{{ dados.prazoDevolucaoContrato }}{% endif %}
+            </p>
+            <p><strong>Certidão negativa de falência:</strong> 
+                {% if dados.certidaoFalencia == 'exigido' %}Exigido
+                {% elif dados.certidaoFalencia == 'nao-exigido' %}Não exigido
+                {% else %}{{ dados.certidaoFalencia }}{% endif %}
+            </p>
+            <p><strong>Balanço patrimonial:</strong> 
+                {% if dados.balancoPatrimonial == 'exigido' %}Exigido
+                {% elif dados.balancoPatrimonial == 'nao-exigido' %}Não exigido
+                {% else %}{{ dados.balancoPatrimonial }}{% endif %}
+            </p>
+            <p><strong>Exigência de garantia:</strong> 
+                {% if dados.exigenciaGarantia == 'sim' %}Sim
+                {% elif dados.exigenciaGarantia == 'nao' %}Não
+                {% else %}{{ dados.exigenciaGarantia }}{% endif %}
+            </p>
+            <p><strong>Habilitação Técnica:</strong> 
+                {% if dados.habilitacaoTecnica == 'exigido' %}Exigido
+                {% elif dados.habilitacaoTecnica == 'nao-exigido' %}Não exigido
+                {% else %}{{ dados.habilitacaoTecnica }}{% endif %}
+            </p>
+            <p><strong>Habilitação Fiscal - Certidão Estadual:</strong> 
+                {% if dados.habilitacaoFiscal == 'exigido' %}Exigido
+                {% elif dados.habilitacaoFiscal == 'nao-exigido' %}Não exigido
+                {% else %}{{ dados.habilitacaoFiscal }}{% endif %}
+            </p>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">Visita Técnica</div>
+        <div class="section-content">
+            <p><strong>Visita técnica:</strong> 
+                {% if dados.visitaTecnica == 'facultativa' %}Facultativa
+                {% elif dados.visitaTecnica == 'obrigatoria' %}Obrigatória
+                {% elif dados.visitaTecnica == 'nao-tem' %}Não tem visita
+                {% else %}{{ dados.visitaTecnica }}{% endif %}
+            </p>
+            
+            {% if dados.visitaTecnica in ['obrigatoria', 'facultativa'] and dados.contatosVisita %}
+            <p><strong>Contatos para agendamento de visita:</strong> {{ dados.contatosVisita }}</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">Configuração de Lances</div>
+        <div class="section-content">
+            <p><strong>Lance:</strong> 
+                {% if dados.lance == 'percentual-desconto' %}Percentual de desconto superior
+                {% elif dados.lance == 'valor-inferior' %}Valor inferior
+                {% else %}{{ dados.lance }}{% endif %}
+            </p>
+            <p><strong>Intervalo mínimo entre os lances:</strong> {{ dados.intervaloMinimo }}</p>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">Contato e Esclarecimentos</div>
+        <div class="section-content">
+            <p><strong>Contato para esclarecimento ou impugnação:</strong> {{ dados.contatoEsclarecimento }}</p>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">Descrição do Edital</div>
+        <div class="section-content">
+            <p>{{ dados.descricao }}</p>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">Informações Adicionais</div>
+        <div class="section-content">
+            <p><strong>Data de Geração:</strong> {{ dados.dataGeracao }}</p>
+            <p><strong>Gerado por:</strong> {{ dados.usuario }}</p>
+        </div>
+    </div>
+    
+    <div class="actions">
+        <a href="{{ url_for('index') }}" class="back-btn">Voltar</a>
+        <button onclick="window.print()" class="print-btn">Imprimir</button>
+    </div>
+</div>
+{% endblock %}

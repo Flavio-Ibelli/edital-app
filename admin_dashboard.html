@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Dashboard do Administrador</h2>
+    <p>Bem-vindo ao painel de controle do administrador, {{ current_user.username }}!</p>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">Estatísticas Gerais</div>
+                <div class="card-body">
+                    <h5 class="card-title">Total de Usuários: {{ total_users }}</h5>
+                    <h5 class="card-title">Total de Editais Gerados: {{ total_editals }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">Ações Rápidas</div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><a href="{{ url_for('admin_all_editals') }}" class="btn btn-primary btn-block">Gerenciar Todos os Editais</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('admin_manage_users') }}" class="btn btn-info btn-block">Gerenciar Usuários</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('admin_add_user') }}" class="btn btn-success btn-block">Adicionar Novo Usuário</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

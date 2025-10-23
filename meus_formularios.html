@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Meus Formulários Salvos{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Meus Formulários Salvos</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if formularios_salvos %}
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Nome do Formulário</th>
+                <th>Última Atualização</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for formulario in formularios_salvos %}
+            <tr>
+                <td>{{ formulario.form_name }}</td>
+                <td>{{ formulario.updated_at }}</td>
+                <td>
+                    <a href="{{ url_for('editar_formulario', form_id=formulario.id) }}" class="btn btn-sm btn-info">Editar</a>
+                    <a href="{{ url_for('download_edital', filename=formulario.generated_edital_path.split('/')[-1]) }}" class="btn btn-sm btn-success" {% if not formulario.generated_edital_path %}disabled{% endif %}>Download Último Edital</a>
+                    <form action="{{ url_for('excluir_formulario', form_id=formulario.id) }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir este formulário?');">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        Você ainda não tem nenhum formulário salvo. Comece a <a href="{{ url_for('gerar_edital_web') }}">preencher um novo formulário</a>!
+    </div>
+    {% endif %}
+
+    <a href="{{ url_for('gerar_edital_web') }}" class="btn btn-primary mt-3">Criar Novo Formulário</a>
+</div>
+{% endblock %}

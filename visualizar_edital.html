@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ edital.titulo }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header-content">
+    <!-- Logo do Metrô com tamanho fixo e estilo definido -->
+    <img src="{{ url_for('static', filename='img/logo-metro.png') }}" 
+         alt="Logo do Metrô" 
+         style="height: 60px; width: auto; display: block; margin: 0 auto 15px auto;">
+        
+           <div class="header-text">
+        <h1>{{ edital.titulo }}</h1>
+        <p>Edital nº {{ edital.numero_edital }}</p>
+        <p>Modalidade: {{ modalidades[edital.modalidade] }}</p>
+        <p>Criado por: {{ creator_username }}</p>
+    </div>
+</div>
+    
+    <div class="actions">
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">Voltar</a>
+        <a href="{{ url_for('imprimir_edital', edital_id=edital.id) }}" class="btn btn-primary">Imprimir</a>
+        <a href="{{ url_for('exportar_pdf', edital_id=edital.id) }}" class="btn btn-success">Exportar PDF</a>
+    </div>
+    
+    <div class="content">
+        <!-- Seção: Informações Gerais -->
+        <div class="section">
+            <h2>Informações Gerais</h2>
+            <div class="info-group">
+                <p><strong>Objeto:</strong> {{ edital.objeto }}</p>
+                <p><strong>Orçamento Estimado:</strong> {{ edital.orcamento }}</p>
+                <p><strong>Prazo de Execução:</strong> {{ edital.prazo_execucao }} dias</p>
+                <p><strong>Unidade Responsável:</strong> {{ edital.unidade_responsavel }}</p>
+            </div>
+        </div>
+        
+        <!-- Seção: Requisitos Técnicos -->
+        <div class="section">
+            <h2>Requisitos Técnicos</h2>
+            <div class="info-group">
+                <p><strong>Requisitos Técnicos:</strong> {{ edital.requisitos_tecnicos }}</p>
+                <p><strong>Qualificação Técnica:</strong> {{ edital.qualificacao_tecnica }}</p>
+                <p><strong>Especificações Técnicas:</strong> {{ edital.especificacoes_tecnicas }}</p>
+                <p><strong>Normas Técnicas Aplicáveis:</strong> {{ edital.normas_tecnicas }}</p>
+            </div>
+        </div>
+        
+        <!-- Seção: Critérios de Avaliação -->
+        <div class="section">
+            <h2>Critérios de Avaliação</h2>
+            <div class="info-group">
+                <p><strong>Critérios de Avaliação:</strong> {{ edital.criterios_avaliacao }}</p>
+                <p><strong>Tipo de Licitação:</strong> {{ tipos_licitacao[edital.tipo_licitacao] }}</p>
+                <p><strong>Critérios de Desempate:</strong> {{ edital.criterios_desempate }}</p>
+            </div>
+        </div>
+        
+        <!-- Seção: Habilitação -->
+        <div class="section">
+            <h2>Habilitação</h2>
+            <div class="info-group">
+                <p><strong>Habilitação Jurídica:</strong> {{ edital.habilitacao_juridica }}</p>
+                <p><strong>Regularidade Fiscal e Trabalhista:</strong> {{ edital.regularidade_fiscal }}</p>
+                <p><strong>Qualificação Econômico-Financeira:</strong> {{ edital.qualificacao_economica }}</p>
+            </div>
+        </div>
+        
+        <!-- Seção: Datas -->
+        <div class="section">
+            <h2>Datas</h2>
+            <div class="info-group">
+                <p><strong>Data de Publicação:</strong> {{ edital.data_publicacao }}</p>
+                <p><strong>Data de Abertura:</strong> {{ edital.data_abertura }}</p>
+                <p><strong>Data de Visita Técnica:</strong> {{ edital.data_visita_tecnica }}</p>
+                <p><strong>Data de Início da Execução:</strong> {{ edital.data_inicio_execucao }}</p>
+            </div>
+        </div>
+        
+        <!-- Seção: Recursos e Garantias -->
+        <div class="section">
+            <h2>Recursos e Garantias</h2>
+            <div class="info-group">
+                <p><strong>Fonte de Recursos:</strong> {{ edital.fonte_recursos }}</p>
+                <p><strong>Dotação Orçamentária:</strong> {{ edital.dotacao_orcamentaria }}</p>
+                <p><strong>Valor da Garantia:</strong> {{ edital.valor_garantia }}</p>
+                <p><strong>Condições de Pagamento:</strong> {{ edital.condicoes_pagamento }}</p>
+            </div>
+        </div>
+        
+        <!-- Seção: Penalidades -->
+        <div class="section">
+            <h2>Penalidades</h2>
+            <div class="info-group">
+                <p><strong>Sanções Administrativas:</strong> {{ edital.sancoes_administrativas }}</p>
+                <p><strong>Multas e Penalidades:</strong> {{ edital.multas_penalidades }}</p>
+            </div>
+        </div>
+        
+        <!-- Seção: Contato -->
+        <div class="section">
+            <h2>Contato</h2>
+            <div class="info-group">
+                <p><strong>Local de Entrega das Propostas:</strong> {{ edital.local_entrega_propostas }}</p>
+                <p><strong>Responsável:</strong> {{ edital.contato_responsavel }}</p>
+                <p><strong>E-mail:</strong> {{ edital.email_contato }}</p>
+                <p><strong>Telefone:</strong> {{ edital.telefone_contato }}</p>
+            </div>
+        </div>
+        
+        <!-- Seção: Observações -->
+        {% if edital.observacoes %}
+        <div class="section">
+            <h2>Observações</h2>
+            <div class="info-group">
+                <p>{{ edital.observacoes }}</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
