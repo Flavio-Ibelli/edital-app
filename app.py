@@ -28,7 +28,16 @@ app = Flask(__name__)
 # Configuração da chave secreta para sessões (ESSENCIAL!)
 # Altere esta chave para uma string longa e aleatória em produção
 app.config['SECRET_KEY'] = 'uma_chave_secreta_muito_forte_e_aleatoria_para_producao_12345'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db' # Configuração do SQLAlchemy
+# Configuração do banco de dados
+if os.environ.get('DATABASE_URL'):
+    # Produção (Render) - PostgreSQL
+    database_url = os.environ.get('DATABASE_URL')
+    if database_url.startswith('postgres://'):
+        database_url = database_url.replace('postgres://', 'postgresql://', 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+else:
+    # Desenvolvimento local - SQLite
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///edital_app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # Desativa o rastreamento de modificações para economizar recursos
 
 # Caminhos para pastas
@@ -917,4 +926,5 @@ if __name__ == '__main__':
         print("💡 Para parar: Ctrl+C")
         print()
         
+
         app.run(host='127.0.0.1', port=5000, debug=True)
